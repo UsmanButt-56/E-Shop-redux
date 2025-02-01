@@ -3,7 +3,8 @@ import Input from "../../Components/Input/Input";
 import { IoIosArrowDown } from "react-icons/io";
 //import belt from '../../assets/belt.jpg';
 import { useSelector } from "react-redux";
-function Checkout() {
+import { useNavigate } from "react-router-dom";
+function Checkout({ setOrder }) {
   const [isBillingOpen, setIsBillingOpen] = useState(false);
   const handleOpen = () => {
     setIsBillingOpen(!isBillingOpen);
@@ -13,13 +14,32 @@ function Checkout() {
     setIsShippingOpen(!isShippingOpen);
   };
   const [isPayment, setPayment] = useState(false);
-  const Payment = () => {
+  const handlePayment = () => {
     setPayment(!isPayment);
   };
 
   const cart = useSelector((state) => state.cart.carts);
-  console.log("The cart is",cart);
+  console.log("The cart is", cart);
   const totalprice = useSelector((state) => state.cart.totalprice);
+
+  const [shippingInfo, setShippingInfo] = useState({
+    address: "",
+    city: "",
+    zipcode: "",
+  });
+
+  const navigate = useNavigate();
+  const Order = () =>
+  {
+    const newOrder = {
+      products : cart,
+      orderNumber : "1234567890",
+      shippingInformation : shippingInfo,
+      Totalprice : totalprice
+    }
+    setOrder(newOrder);
+    navigate("/thankyou");
+  }
   return (
     <div className="w-11/12 mx-auto py-5">
       <div>
@@ -44,18 +64,18 @@ function Checkout() {
                 {isBillingOpen && (
                   <form action="">
                     <div>
-                      <Input name="Name" type="text" placeholder="Enter Name" />
+                      <Input name="name" type="text" placeholder="Enter Name" />
                     </div>
                     <div>
                       <Input
-                        name="Email"
+                        name="email"
                         type="email"
                         placeholder="Enter Email"
                       />
                     </div>
                     <div>
                       <Input
-                        name="Phone"
+                        name="phone"
                         type="number"
                         placeholder="Enter Phone #"
                       />
@@ -84,22 +104,42 @@ function Checkout() {
                     <div>
                       <Input
                         name="Address"
+                        title="address"
                         type="text"
                         placeholder="Enter Address"
+                        onChange={(e) =>
+                          setShippingInfo((prev) => ({
+                            ...prev,
+                            address: e.target.value,
+                          }))
+                        }
                       />
                     </div>
                     <div>
                       <Input
                         name="City"
-                        type="email"
+                        title= "City"
+                        type="text"
                         placeholder="Enter california"
-                      />
+                        onChange={(e) =>
+                          setShippingInfo((prev) => ({
+                            ...prev,
+                            city: e.target.value,
+                          }))
+                        }/>
                     </div>
                     <div>
                       <Input
-                        name="Zip Code"
+                        name="Zipcode"
+                        title= "Zipcode"
                         type="number"
                         placeholder="Enter Zip Code"
+                        onChange={(e) =>
+                          setShippingInfo((prev) => ({
+                            ...prev,
+                            zipcode: e.target.value,
+                          }))
+                        }
                       />
                     </div>
                   </form>
@@ -117,7 +157,7 @@ function Checkout() {
                     className={`text-xl font-bold ${
                       isPayment ? "rotate-180" : ""
                     }`}
-                    onClick={() => Payment()}
+                    onClick={() => handlePayment()}
                   >
                     <IoIosArrowDown />
                   </div>
@@ -144,33 +184,35 @@ function Checkout() {
             <div className="">
               <h3 className="text-xl font-semibold">Order Summary</h3>
             </div>
-            {
-              cart.map((item)=>(
-                <div className="flex justify-between border-b border-gray-500 py-1">
-              <div className="flex">
-                <div className="w-16 h-16">
-                  <img src={item.image} alt="" className="w-full h-full"/>
-                </div>
-                <div className="flex flex-col justify-center">
-                  <div>
-                    <h3>{item.name}</h3>
+            {cart.map((item) => (
+              <div className="flex justify-between border-b border-gray-500 py-1">
+                <div className="flex">
+                  <div className="w-16 h-16">
+                    <img src={item.image} alt="" className="w-full h-full" />
                   </div>
-                  <div>
-                    <p>${item.price} * {item.quantity}</p>
+                  <div className="flex flex-col justify-center">
+                    <div>
+                      <h3>{item.name}</h3>
+                    </div>
+                    <div>
+                      <p>
+                        ${item.price} * {item.quantity}
+                      </p>
+                    </div>
                   </div>
                 </div>
+                <div>${item.totalprice}</div>
               </div>
-              <div>${item.price}</div>
-            </div>
-              ))
-            }
-            
+            ))}
 
             <div className="flex justify-between py-2">
               <div>Total Price:</div>
               <div className="font-bold">${totalprice}</div>
             </div>
-            <div className="bg-red-600 text-white w-full h-[40px] flex justify-center">
+            <div
+              className="bg-red-600 text-white w-full h-[40px] flex justify-center"
+              onClick={() => Order()}
+            >
               <button>Place Order</button>
             </div>
           </div>

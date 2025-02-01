@@ -38,7 +38,7 @@ function Cart() {
   const navigate = useNavigate();
   const checkout = () =>
   {
-     navigate('/checkout');
+    navigate('/checkout');
   }
   return (
     <div className="w-11/12 mx-auto py-5">
@@ -61,10 +61,11 @@ function Cart() {
                 <div className="flex justify-between font-semibold text-xs md:text-sm items-center border-b border-gray-200 py-3">
                   <div className="w-[40px] h-[40px] cursor-pointer">
                     <img src={carr.image} alt="" className="w-full h-full" />
+                    
                   </div>
-                  <div>
+                  {/* <div>
                     <h3>{carr.title}</h3>
-                  </div>
+                  </div> */}
                   <div className="flex space-x-6 md:space-x-16 lg:space-x-16 items-center justify-center text-center">
                     <div className="pe-0">${carr.price.toFixed(2)}</div>
                     <div className="flex">

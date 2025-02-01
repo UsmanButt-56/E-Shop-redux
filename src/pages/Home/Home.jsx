@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Categories, mockdata } from "../../assets/categoriesdata";
-//import { Categories } from "../../assets/categoriesdata";
 import framed from "../../assets/frame.jpg";
 import InfoSection from "../InfoSection/InfoSection";
 import CategorySection from "../CategorySection/CategorySection";
@@ -8,8 +7,8 @@ import { setProducts } from "../../redux/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { FaStar } from "react-icons/fa";
 import { FaRegStar } from "react-icons/fa";
-//import ShopCard from "../ShopCard/ShopCard";
 import { addtocart } from "../../redux/cartSlice";
+import { ToastContainer, toast } from "react-toastify";
 function Home() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product);
@@ -20,10 +19,12 @@ function Home() {
   const handleCart = (product) =>
   {
     dispatch(addtocart(product));
-    alert("Data Added");
+    console.log("The title is:",product.title);
+    toast.success("Item Added in Cart");
   }
   return (
     <>
+     <ToastContainer />
       <div className="w-11/12 mx-auto lg:py-4 mt-4 md:mt-8">
         <div className="grid grid-cols-1 lg:grid-cols-[30%_70%]">
           <div className="lg:me-4">
